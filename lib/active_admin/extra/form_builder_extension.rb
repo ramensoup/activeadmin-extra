@@ -8,13 +8,6 @@ module ActiveAdmin
           alias_method_chain :has_many, :fixes
         end
       end
-      
-      def with_new_form_buffer_NEW
-        html << "".html_safe
-        return_value = yield
-        html.pop
-        return_value
-      end
 
       def has_many_with_fixes(association, options = {}, &block)
         options = { :for => association }.merge(options)
@@ -38,8 +31,9 @@ module ActiveAdmin
           contents
         end
 
-        content = with_new_form_buffer_NEW do
+        content = with_new_form_buffer do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
+            # form_buffers.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
             template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
 
             options[:class] ||= ""
@@ -47,7 +41,7 @@ module ActiveAdmin
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = with_new_form_buffer_NEW do
+            js = with_new_form_buffer do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
@@ -58,9 +52,11 @@ module ActiveAdmin
             js = template.escape_javascript(js)
             js = template.link_to I18n.t('active_admin.has_many_new', :model => object.class.reflect_on_association(association).klass.model_name.human), "#", :onclick => "$(this).before('#{js}'.replace(/NEW_RECORD/g, new Date().getTime())); return false;", :class => "button"
 
+            #form_buffers.last << js.html_safe
             js.html_safe
           end
         end
+        # form_buffers.last << content.html_safe
         content.html_safe
       end
 
@@ -68,6 +64,7 @@ module ActiveAdmin
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
+        # form_buffers.last
       end
 
       def errors
