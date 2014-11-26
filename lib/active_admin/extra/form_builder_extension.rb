@@ -8,6 +8,13 @@ module ActiveAdmin
           alias_method_chain :has_many, :fixes
         end
       end
+      
+      def with_new_form_buffer_NEW
+        html << "".html_safe
+        return_value = yield
+        html.pop
+        return_value
+      end
 
       def has_many_with_fixes(association, options = {}, &block)
         options = { :for => association }.merge(options)
@@ -31,7 +38,7 @@ module ActiveAdmin
           contents
         end
 
-        content = with_new_form_buffer do
+        content = with_new_form_buffer_NEW do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
             template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
 
@@ -40,7 +47,7 @@ module ActiveAdmin
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = with_new_form_buffer do
+            js = with_new_form_buffer_NEW do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
