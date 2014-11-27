@@ -31,16 +31,16 @@ module ActiveAdmin
           contents
         end
 
-        content = with_new_form_buffer do
+        content = input_wrapping do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
-            template.output_buffer.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
+            template.output_buffer << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
 
             options[:class] ||= ""
             options[:class] = "#{options[:class]} inputs has_many_fields".strip
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = with_new_form_buffer do
+            js = input_wrapping do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
@@ -51,17 +51,17 @@ module ActiveAdmin
             js = template.escape_javascript(js)
             js = template.link_to I18n.t('active_admin.has_many_new', :model => object.class.reflect_on_association(association).klass.model_name.human), "#", :onclick => "$(this).before('#{js}'.replace(/NEW_RECORD/g, new Date().getTime())); return false;", :class => "button"
 
-            template.output_buffer.last << js.html_safe
+            template.concat(js.html_safe)
           end
         end
-        template.output_buffer.last << content.html_safe
+        template.concat(content.html_safe)
       end
 
       def destroy(options = {})
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
-        template.output_buffer.last
+        template.concat(template.output_buffer)
       end
 
       def errors
