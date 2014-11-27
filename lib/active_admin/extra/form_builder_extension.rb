@@ -61,7 +61,7 @@ module ActiveAdmin
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
-        template.concat(template.output_buffer.last)
+        template.output_buffer.last
       end
 
       def errors
