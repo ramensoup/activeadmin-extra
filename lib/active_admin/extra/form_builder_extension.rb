@@ -40,7 +40,7 @@ module ActiveAdmin
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = input_wrapping do
+            js = without_wrapper do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
