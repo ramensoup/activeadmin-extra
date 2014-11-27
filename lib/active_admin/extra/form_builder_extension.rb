@@ -54,7 +54,7 @@ module ActiveAdmin
             template.concat(js.html_safe)
           end
         end
-        template.concat(content.html_safe)
+        template.output_buffer << content.html_safe
       end
 
       def destroy(options = {})
