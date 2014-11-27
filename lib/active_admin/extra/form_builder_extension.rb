@@ -52,11 +52,11 @@ module ActiveAdmin
             js = template.escape_javascript(js)
             js = template.link_to I18n.t('active_admin.has_many_new', :model => object.class.reflect_on_association(association).klass.model_name.human), "#", :onclick => "$(this).before('#{js}'.replace(/NEW_RECORD/g, new Date().getTime())); return false;", :class => "button"
 
-            @buffers.last << js.html_safe
+            @buffer.last << js.html_safe
             #js.html_safe
           end
         end
-        @buffers.last << content.html_safe
+        @buffer.last << content.html_safe
         #content.html_safe
       end
 
@@ -64,7 +64,7 @@ module ActiveAdmin
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
-        @buffers.last
+        @buffer.last
       end
 
       def errors
