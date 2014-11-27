@@ -33,7 +33,7 @@ module ActiveAdmin
 
         content = input_wrapping do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
-            template.output_buffer << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
+            template.output_buffer.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
 
             options[:class] ||= ""
             options[:class] = "#{options[:class]} inputs has_many_fields".strip
