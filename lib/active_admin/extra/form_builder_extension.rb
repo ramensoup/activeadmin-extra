@@ -51,17 +51,17 @@ module ActiveAdmin
             js = template.escape_javascript(js)
             js = template.link_to I18n.t('active_admin.has_many_new', :model => object.class.reflect_on_association(association).klass.model_name.human), "#", :onclick => "$(this).before('#{js}'.replace(/NEW_RECORD/g, new Date().getTime())); return false;", :class => "button"
 
-            already_in_an_inputs_block.last << js.html_safe
+            template.output_buffer.last << js.html_safe
           end
         end
-        already_in_an_inputs_block.last << content.html_safe
+        template.output_buffer.last << content.html_safe
       end
 
       def destroy(options = {})
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
-        already_in_an_inputs_block
+        template.output_buffer.last
       end
 
       def errors
