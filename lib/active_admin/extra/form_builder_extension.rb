@@ -31,7 +31,7 @@ module ActiveAdmin
           contents
         end
 
-        content = input_wrapping do
+        content = with_new_form_buffer do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
             template.output_buffer.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
     
