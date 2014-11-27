@@ -61,7 +61,7 @@ module ActiveAdmin
         unless object.new_record?
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
-        already_in_an_inputs_block.last
+        already_in_an_inputs_block
       end
 
       def errors
