@@ -31,16 +31,16 @@ module ActiveAdmin
           contents
         end
 
-        content = without_wrapper do
+        content = with_new_form_buffer do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
-            already_in_an_inputs_block.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
-    
+            template.output_buffer.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
+
             options[:class] ||= ""
             options[:class] = "#{options[:class]} inputs has_many_fields".strip
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = without_wrapper do
+            js = with_new_form_buffer do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
