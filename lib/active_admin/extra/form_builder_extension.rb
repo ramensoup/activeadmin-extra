@@ -70,7 +70,7 @@ module ActiveAdmin
           input :_destroy, { :as => :boolean }.reverse_merge(options)
         end
         #form_buffers.last
-        html
+        html = "".html_safe
       end
 
       def errors
