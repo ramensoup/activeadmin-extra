@@ -10,6 +10,7 @@ module ActiveAdmin
       end
 
       def has_many_with_fixes(association, options = {}, &block)
+        html = "".html_safe
         options = { :for => association }.merge(options)
 
         # Add Delete Links
@@ -58,12 +59,10 @@ module ActiveAdmin
             js = template.link_to I18n.t('active_admin.has_many_new', :model => object.class.reflect_on_association(association).klass.model_name.human), "#", :onclick => "$(this).before('#{js}'.replace(/NEW_RECORD/g, new Date().getTime())); return false;", :class => "button"
 
             #form_buffers.last << js.html_safe
-            html = "".html_safe
             html << js.html_safe
           end
         end
         #form_buffers.last << content.html_safe
-        html = "".html_safe
         html << content.html_safe
       end
 
