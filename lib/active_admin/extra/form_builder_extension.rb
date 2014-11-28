@@ -31,7 +31,7 @@ module ActiveAdmin
           contents
         end
 
-        content = without_wrapper do
+        content = input_wrapping do
           template.content_tag :div, :class => "has_many #{association} #{options[:class]}" do
             #form_buffers.last << template.content_tag(:h3, options[:label] || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
             if self.respond_to?(:form_buffers)
@@ -46,7 +46,7 @@ module ActiveAdmin
             inputs options, &form_block
 
             # Capture the ADD JS
-            js = without_wrapper do
+            js = input_wrapping do
               inputs_for_nested_attributes  :for => [association, object.class.reflect_on_association(association).klass.new],
                                             :class => options[:class],
                                             :for_options => {
